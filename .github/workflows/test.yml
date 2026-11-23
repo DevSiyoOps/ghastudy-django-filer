@@ -2,9 +2,13 @@ name: CodeCov
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   unit-tests:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -40,9 +44,9 @@ jobs:
             python-version: 3.14
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
       with:
         python-version: ${{ matrix.python-version }}
     - name: library prerequisites
@@ -63,17 +67,18 @@ jobs:
     - name: Run coverage
       run: coverage run ./tests/settings.py
     - name: Upload Coverage to Codecov
-      uses: codecov/codecov-action@v6
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v6
 
   unit-tests-without-svg-renderer:
     # svglib and reportlab are the optional django-filer[svg] extra. The matrix
     # above always has them, so this job covers what a plain "pip install
     # django-filer" gets: filer reading and thumbnailing SVGs on its own.
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
     - name: Set up Python
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
       with:
         python-version: '3.13'
     - name: library prerequisites
@@ -102,4 +107,4 @@ jobs:
     - name: Run coverage
       run: coverage run ./tests/settings.py
     - name: Upload Coverage to Codecov
-      uses: codecov/codecov-action@v6
+      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v6
